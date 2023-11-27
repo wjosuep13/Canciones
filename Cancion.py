@@ -1,4 +1,5 @@
-from Cantante import Cantante
+from cantante import Cantante
+from timeUtils import convertir_minutosfloat
 class Cancion:
     def __init__(self, nombre, duracion, favorita, estrellas,cantante: Cantante):
         self.nombre = nombre
@@ -9,7 +10,7 @@ class Cancion:
 
 
     def mostrarCancion(self):
-        return f"{self.nombre}, {self.duracion}, {self.favorita}, {self.estrellas} estrellas"
+        print (f"{self.nombre}, {convertir_minutosfloat(self.duracion)}, Favorita: {self.favorita}, {self.estrellas} estrellas, Cantante: {self.cantante.getNombre()}")
 
     def modificarEstrellas(self, val):
         self.estrellas = val

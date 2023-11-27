@@ -1,38 +1,54 @@
+from tabulate import tabulate
+from timeUtils import convertir_minutosfloat
+
+
 class ListaCanciones:
     def __init__(self, nombre, creador):
         self.nombre = nombre
         self.creador = creador
         self.cantidad = 0
-        self.duracion = '00:00'
+        self.duracion = 0.0
         self.listaCancion = []
 
+    
     def crearLista(self, lista):
         self.listaCancion.extend(lista)
         self.cantidad =self.cantidad+ len(lista)
         for cancion in lista:
-            self.duracion = sumar_minutos(self.duracion, cancion.duracion)
+                self.duracion = self.duracion + cancion.duracion
     
-
-
-
-    def sumar_minutos(min1, min2):
-    # Convierte cada tiempo a segundos
-    minutos1, segundos1 = map(int, min1.split(':'))
-    minutos2, segundos2 = map(int, min2.split(':'))
-    total_segundos1 = minutos1 * 60 + segundos1
-    total_segundos2 = minutos2 * 60 + segundos2
-
-    # Suma los segundos totales
-    suma_total_segundos = total_segundos1 + total_segundos2
-
-    # Convierte la suma total de nuevo a minutos y segundos
-    minutos_totales = suma_total_segundos // 60
-    segundos_totales = suma_total_segundos % 60
-
-    return f"{minutos_totales}:{segundos_totales:02d}"
-
     def mostrarLista(self):
-        return [cancion.mostrarCancion() for cancion in self.listaCancion]
+        if not self.listaCancion:
+            print("La lista está vacía.")
+            return
+        canciones_datos = [
+            {
+                'Canción': cancion.nombre,
+                'Cantante': cancion.cantante.nombre,
+                'Duración': convertir_minutosfloat(cancion.duracion),
+                'Estrellas': cancion.estrellas,
+                'Favorita': cancion.favorita
 
-    def ordenarLista(self):
-        self.listaCancion.sort(key=lambda x: x.nombre)
+            }
+            for cancion in self.listaCancion
+        ]
+
+        # Imprimir la lista tabulada
+        print(tabulate(canciones_datos, headers="keys", tablefmt="grid",showindex=False))
+
+    def ordenarLista(self, atributo):
+        # Verifica si es un atributo anidado
+        if "." in atributo:
+            partes = atributo.split(".")
+            self.listaCancion.sort(key=lambda cancion: getattr(getattr(cancion, partes[0]), partes[1]))
+        else:
+            # Si el atributo necesita una comparación numérica
+            if atributo == 'duracion':
+                self.listaCancion.sort(key=lambda cancion: float(cancion.duracion))
+            elif atributo == 'estrellas':
+                self.listaCancion.sort(key=lambda cancion: int(cancion.estrellas))
+            # Ordena por el atributo directamente si no es un atributo anidado y no necesita conversión
+            else:
+                self.listaCancion.sort(key=lambda cancion: getattr(cancion, atributo))
+
+
