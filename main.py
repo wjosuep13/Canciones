@@ -2,7 +2,7 @@
 import csv
 
 #utilidades
-from timeUtils import convertir_minutosfloat
+from utils import convertir_minutosfloat, minutosToFloat,print_error
 #clases propias
 from cantante import Cantante
 from cancion import Cancion
@@ -29,7 +29,7 @@ def loadData():
                     grupo = row['Grupo']
                     favorita = row['Favorita']
                     cantante = Cantante(cantante, grupo)
-                    duracion = float(duracionstr.replace(" ", ""))
+                    duracion = minutosToFloat(duracionstr)
                     cancion = Cancion(cancion, duracion, favorita, estrellas, cantante)
                     cancion.mostrarCancion()
                     lista.append(cancion)
@@ -89,14 +89,15 @@ def ingresarCancionesaLista():
     for i in range(cantidad):
         print(f"Ingrese los datos de la canción {i + 1}:")
         nombre = input("Ingrese el nombre de la canción: ")
-        duracion = ingresar_flotante("Ingrese la duración de la canción (minutos): ", minimo=0)
+        duracion = ingresar_cadena("Ingrese la duración de la canción (minutos): ")
+        duracionFloat=minutosToFloat(duracion)
         favorita = ingresar_cadena("¿La canción es favorita? (sí/no): ", permitidos=["sí", "si", "no"])
         estrellas = ingresar_entero("Ingrese la cantidad de estrellas (1-5): ", rango=(1, 5))
         print("Ingrese los datos del cantante de la canción:")
         nombre_cantante = input("Ingrese el nombre del cantante: ")
         grupo = input("Ingrese el nombre del grupo: ")
         cantante = Cantante(nombre_cantante, grupo)
-        cancion = Cancion(nombre, duracion, favorita, estrellas, cantante)
+        cancion = Cancion(nombre, duracionFloat, favorita, estrellas, cantante)
         lista.append(cancion)
     return lista
 

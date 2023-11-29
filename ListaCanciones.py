@@ -1,5 +1,5 @@
 from tabulate import tabulate
-from timeUtils import convertir_minutosfloat
+from utils import convertir_minutosfloat
 
 
 class ListaCanciones:

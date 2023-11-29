@@ -1,5 +1,5 @@
 from cantante import Cantante
-from timeUtils import convertir_minutosfloat
+from utils import convertir_minutosfloat
 class Cancion:
     def __init__(self, nombre, duracion, favorita, estrellas,cantante: Cantante):
         self.nombre = nombre
